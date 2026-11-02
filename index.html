@@ -44,17 +44,24 @@
       <div class="s-range"><label for="f-stems"><span>Сколько стеблей</span><b><output data-s-out="stems">11</output></b></label>
       <input id="f-stems" type="range" name="stems" min="3" max="51" step="2" value="11" data-price="0" data-label="стеблей" data-unit="" data-say="стеблей в букете – {v}"></div>
       <p class="s-total"><span>Предварительно</span><b data-s-total>–</b></p>
+      <figure class="s-pick" hidden><img src="" alt=""><figcaption></figcaption></figure>
       <div class="s-bubble" aria-live="polite"><span class="s-bubble__label">Ваше сообщение</span><p data-s-bubble></p></div>
       <div class="s-send">
         <a class="s-btn s-btn--wide" data-s-msg="telegram" href="#">Отправить заказ в MAX</a>
       </div>
-      <p class="s-send__note" data-s-copied hidden>Текст скопирован – вставьте его в чат.</p>
+      <p class="s-send__hint">Текст заказа скопируется сам. В чате MAX нажмите «Вставить» и отправьте.</p>
+      <p class="s-send__note" data-s-copied hidden>Готово: текст заказа скопирован. Откройте чат, нажмите «Вставить» и отправьте.</p>
       
     </form></div>
     <figure class="s-hero__bg" aria-hidden="true"><img class="" src="assets/hero.webp" alt="Букет кремовых роз" decoding="async" fetchpriority="high"></figure>
   </section>
 
   
+
+  <section class="s-section s-reveal" id="katalog">
+    <header class="s-section__head"><h2>Букеты с ценами</h2><p>Нажмите на букет – он появится в форме заказа.</p></header>
+    <div class="s-cat"><figure data-kat="Хризантема Сталион" tabindex="0" role="button"><img src="assets/kat-01.webp" alt="Хризантема Сталион" loading="lazy" decoding="async"><figcaption><span>Хризантема Сталион</span><b>350 ₽</b></figcaption></figure><figure data-kat="МОНО-Роза" tabindex="0" role="button"><img src="assets/kat-02.webp" alt="МОНО-Роза" loading="lazy" decoding="async"><figcaption><span>МОНО-Роза</span><b>4 200 ₽</b></figcaption></figure><figure data-kat="Моно-букет из хризантемы" tabindex="0" role="button"><img src="assets/kat-03.webp" alt="Моно-букет из хризантемы" loading="lazy" decoding="async"><figcaption><span>Моно-букет из хризантемы</span><b>2 800 ₽</b></figcaption></figure><figure data-kat="Моно-букет из хризантемы &quot;Ромашка&quot;" tabindex="0" role="button"><img src="assets/kat-04.webp" alt="Моно-букет из хризантемы &quot;Ромашка&quot;" loading="lazy" decoding="async"><figcaption><span>Моно-букет из хризантемы &quot;Ромашка&quot;</span><b>3 500 ₽</b></figcaption></figure><figure data-kat="Роза 60 см" tabindex="0" role="button"><img src="assets/kat-05.webp" alt="Роза 60 см" loading="lazy" decoding="async"><figcaption><span>Роза 60 см</span><b>350 ₽</b></figcaption></figure><figure data-kat="Гербера" tabindex="0" role="button"><img src="assets/kat-06.webp" alt="Гербера" loading="lazy" decoding="async"><figcaption><span>Гербера</span><b>250 ₽</b></figcaption></figure><figure data-kat="АЛЬСТРОМЕРИЯ" tabindex="0" role="button"><img src="assets/kat-07.webp" alt="АЛЬСТРОМЕРИЯ" loading="lazy" decoding="async"><figcaption><span>АЛЬСТРОМЕРИЯ</span><b>250 ₽</b></figcaption></figure><figure data-kat="Орхидея" tabindex="0" role="button"><img src="assets/kat-08.webp" alt="Орхидея" loading="lazy" decoding="async"><figcaption><span>Орхидея</span><b>3 000 ₽</b></figcaption></figure></div>
+  </section>
 
   <section class="s-section s-reveal" id="prices">
     <header class="s-section__head"><h2>Цены</h2><p>Цены с карточки на Яндекс.Картах. Точный состав и сумму подтвердим в сообщении.</p></header>
@@ -138,5 +145,30 @@
 <footer class="s-foot"><p>Ф-1.61 · Иркутск</p><p>Цветы с доставкой по Иркутску</p></footer>
 <nav class="s-dock" aria-label="Быстрая связь"><a class="s-btn" href="#widget">Заказать букет</a><a class="s-btn s-btn--ghost" href="tel:+79249959199">Позвонить</a></nav>
 <script src="style.js" defer></script>
+<script>
+// правка Юли: выбор букета в форме или клик по карточке каталога меняет главное фото
+(function () {
+  var M = {"хризантема сталион":"assets/kat-01.webp","моно-роза":"assets/kat-02.webp","моно-букет из хризантемы":"assets/kat-03.webp","моно-букет из хризантемы \"ромашка\"":"assets/kat-04.webp","роза 60 см":"assets/kat-05.webp","гербера":"assets/kat-06.webp","альстромерия":"assets/kat-07.webp","орхидея":"assets/kat-08.webp"}, N = {"хризантема сталион":"Хризантема Сталион","моно-роза":"МОНО-Роза","моно-букет из хризантемы":"Моно-букет из хризантемы","моно-букет из хризантемы \"ромашка\"":"Моно-букет из хризантемы \"Ромашка\"","роза 60 см":"Роза 60 см","гербера":"Гербера","альстромерия":"АЛЬСТРОМЕРИЯ","орхидея":"Орхидея"}, imgs = document.querySelectorAll(".s-hero__photo img, .s-hero__bg img");
+  var key = function (el) { return ((el && (el.dataset.name || el.dataset.label || el.dataset.kat)) || "").toLowerCase(); };
+  var pv = document.querySelector(".s-pick"), pvImg = pv && pv.querySelector("img"), pvCap = pv && pv.querySelector("figcaption");
+  var show = function (n) {
+    var src = M[n]; if (pv) pv.hidden = !src; if (!src) return;
+    imgs.forEach(function (i) { i.removeAttribute("srcset"); i.src = src; });
+    if (pvImg) { pvImg.src = src; pvCap.textContent = N[n] || ""; }
+  };
+  document.addEventListener("change", function (e) { if (e.target.matches("input[type=radio]")) show(key(e.target)); });
+  document.querySelectorAll("[data-kat]").forEach(function (f) {
+    var pick = function () {
+      var n = key(f), r = Array.prototype.find.call(document.querySelectorAll(".s-widget input[type=radio]"), function (x) { return key(x) === n; });
+      if (r) { r.checked = true; r.dispatchEvent(new Event("change", { bubbles: true })); }
+      show(n); var w = document.getElementById("widget"); if (w) w.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    f.addEventListener("click", pick); f.addEventListener("keydown", function (e) { if (e.key === "Enter") pick(); });
+  });
+  // при загрузке главное фото не трогаем: в форме показываем превью уже выбранного букета
+  var first = document.querySelector(".s-widget input[type=radio]:checked"), n0 = key(first);
+  if (pv && M[n0]) { pv.hidden = false; pvImg.src = M[n0]; pvCap.textContent = N[n0] || ""; }
+})();
+</script>
 </body>
 </html>
